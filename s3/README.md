@@ -12,16 +12,16 @@ This guide explains how to configure an **AWS S3 bucket**, **IAM policy**, and *
 ---
 
 ## 📦 Step 1: Create an S3 Bucket
-1. Go to **S3** → **Create bucket**.  
-2. Bucket name:  
+1. Go to **S3** → **Create bucket**.
+3. Enter the Bucket name:  
    ```
    bucket-name
    ```  
-3. Region:  
+4. Region:  
    ```
-   eu-west-2
+   region
    ```  
-4. Click **Create bucket**.  
+5. Click **Create bucket**.  
 
 ---
 
@@ -33,7 +33,10 @@ This guide explains how to configure an **AWS S3 bucket**, **IAM policy**, and *
    - `s3:PutObject`  
    - `s3:DeleteObject`  
 4. Select **Specific resources** → Add your bucket ARN.  
-5. Name the policy: `policy-name`  
+5. Name the policy:
+   ```
+   policy-name
+   ```  
 
 ---
 
@@ -54,13 +57,13 @@ Add credentials to your project’s `.env`:
 AWS_ACCESS_KEY_ID=your-access-key
 AWS_SECRET_ACCESS_KEY=your-secret-key
 AWS_REGION=eu-west-2
-AWS_S3_BUCKET=servicehub-assets
+AWS_S3_BUCKET=bucket-name
 ```
 
 ---
 
 ## 🔐 Step 5: Update Bucket Permissions
-1. Go to **S3** → select your bucket (`servicehub-assets`).  
+1. Go to **S3** → select your bucket (`bucket-name`).  
 2. Open the **Permissions** tab.  
 3. Under **Block public access (bucket settings)** → click **Edit** → **Uncheck all options** → Save changes.  
 4. Scroll to **Bucket policy** → click **Edit** → paste the following policy:  
@@ -76,13 +79,13 @@ AWS_S3_BUCKET=servicehub-assets
         "s3:GetObject",
         "s3:DeleteObject"
       ],
-      "Resource": "arn:aws:s3:::servicehub-assets/*"
+      "Resource": "arn:aws:s3:::bucket-name/*"
     }
   ]
 }
 ```
 
-> Replace `arn:aws:s3:::servicehub-assets` with the actual bucket ARN (visible in your bucket’s **Properties** tab).  
+> Replace `arn:aws:s3:::bucket-name` with the actual bucket ARN (visible in your bucket’s **Properties** tab).  
 
 ---
 
