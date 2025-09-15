@@ -27,7 +27,7 @@ This guide explains how to configure an **AWS S3 bucket**, **IAM policy**, and *
 - `s3:PutObject`  
 - `s3:DeleteObject`  
 4. Select **Specific resources** → Add your bucket ARN.  
-5. Name the policy: servicehub-assets-access
+5. Name the policy: `policy-name`
 
   
 ---
@@ -35,7 +35,7 @@ This guide explains how to configure an **AWS S3 bucket**, **IAM policy**, and *
 ## 👤 Step 3: Create an IAM User
 1. Go to **IAM** → **Users** → **Create user**.  
 2. Enter a username.  
-3. Attach the policy `servicehub-assets-access`.  
+3. Attach the policy `policy-name`.  
 4. After creating the user, open it and create an **Access Key**:  
 - Choose **Other** as the use case.  
 - Copy the **Access Key** and **Secret Key**.  
