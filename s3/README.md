@@ -167,6 +167,6 @@ export const deleteFile = async (fileName) => {
 
 ## ✅ Done!
 You now have:  
-- An **S3 bucket** (`servicehub-assets`)  
+- An **S3 bucket** (`bucket-name`)  
 - An **IAM user** with access keys  
 - A working setup to **upload, download, and delete files** from S3 in Node.js 
