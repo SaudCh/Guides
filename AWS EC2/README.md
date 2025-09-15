@@ -100,9 +100,6 @@ jobs:
           cache: "yarn"
           cache-dependency-path: ./yarn.lock
 
-      - name: Install Yarn
-        run: npm install -g yarn
-
       - name: Install dependencies with Yarn
         working-directory: ./
         run: yarn install --frozen-lockfile
