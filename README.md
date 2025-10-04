@@ -10,13 +10,19 @@ Complete guides for deploying applications on AWS infrastructure including EC2, 
 
 **[View AWS Guides →](./aws/)**
 
+### 📱 Expo/React Native
+
+Comprehensive mobile development guides using Expo and React Native, covering everything from setup to deployment.
+
+**[View Expo Guides →](./expo/)**
+
 ---
 
 ## 🚀 Quick Start
 
 1. **For AWS Deployment**: Check out our [AWS guides](./aws/) for complete cloud deployment solutions
-2. **For React Development**: Coming soon - React development guides
-3. **For Expo/React Native**: Coming soon - Mobile development guides
+2. **For Mobile Development**: Check out our [Expo guides](./expo/) for React Native mobile app development
+3. **For React Development**: Coming soon - React development guides
 
 ---
 
@@ -35,8 +41,8 @@ Complete guides for deploying applications on AWS infrastructure including EC2, 
 | Technology | Status         | Description                                      |
 | ---------- | -------------- | ------------------------------------------------ |
 | **AWS**    | ✅ Complete    | Cloud deployment, monitoring, and infrastructure |
+| **Expo**   | ✅ Complete    | Mobile app development with React Native         |
 | **React**  | 🚧 Coming Soon | Frontend development and best practices          |
-| **Expo**   | 🚧 Coming Soon | Mobile app development with React Native         |
 
 ---
 
