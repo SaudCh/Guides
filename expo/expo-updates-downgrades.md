@@ -29,22 +29,23 @@ Expo uses semantic versioning (SemVer) with the format `MAJOR.MINOR.PATCH`:
 
 | SDK Version | Release Date | Status        | React Native | Node.js |
 | ----------- | ------------ | ------------- | ------------ | ------- |
-| **SDK 50**  | Latest       | ✅ Current    | 0.73.x       | 18+     |
-| **SDK 49**  | Previous     | ✅ Stable     | 0.72.x       | 18+     |
-| **SDK 48**  | Older        | ⚠️ Deprecated | 0.71.x       | 16+     |
-| **SDK 47**  | Legacy       | ❌ EOL        | 0.70.x       | 16+     |
+| **SDK 54**  | Latest       | ✅ Current    | 0.76.x       | 18+     |
+| **SDK 53**  | Previous     | ✅ Stable     | 0.75.x       | 18+     |
+| **SDK 52**  | Older        | ✅ Stable     | 0.74.x       | 18+     |
+| **SDK 51**  | Legacy       | ⚠️ Deprecated | 0.74.x       | 18+     |
+| **SDK 50**  | Legacy       | ⚠️ Deprecated | 0.73.x       | 18+     |
 
 ### Version Compatibility
 
 ```json
 {
   "expo": {
-    "sdkVersion": "50.0.0",
+    "sdkVersion": "54.0.0",
     "runtimeVersion": "1.0.0"
   },
   "dependencies": {
-    "expo": "~50.0.0",
-    "react-native": "0.73.6"
+    "expo": "~54.0.0",
+    "react-native": "0.76.3"
   }
 }
 ```
@@ -75,7 +76,7 @@ npm list expo
 npx expo install --fix
 
 # Update to specific SDK version
-npx expo install --sdk-version 50
+npx expo install --sdk-version 54
 
 # Update with non-interactive mode
 npx expo install --fix --non-interactive
@@ -187,20 +188,20 @@ npx expo start --clear
 
 ```bash
 # Downgrade to specific SDK version
-npx expo install --sdk-version 49
+npx expo install --sdk-version 53
 
 # Downgrade with fix
-npx expo install --sdk-version 49 --fix
+npx expo install --sdk-version 53 --fix
 ```
 
 #### Method 2: Manual Downgrade
 
 ```bash
 # Downgrade Expo SDK
-npm install expo@49.0.0
+npm install expo@53.0.0
 
 # Downgrade React Native
-npm install react-native@0.72.6
+npm install react-native@0.75.6
 
 # Fix dependencies
 npx expo install --fix
@@ -216,7 +217,7 @@ rm -rf node_modules
 rm package-lock.json
 
 # Install specific versions
-npm install expo@49.0.0 react-native@0.72.6
+npm install expo@53.0.0 react-native@0.75.6
 
 # Install compatible dependencies
 npx expo install --fix
@@ -249,8 +250,8 @@ npm view expo versions --json
 #### 3. Downgrade SDK
 
 ```bash
-# Downgrade to SDK 49
-npx expo install --sdk-version 49
+# Downgrade to SDK 53
+npx expo install --sdk-version 53
 
 # Verify downgrade
 npx expo install --check
@@ -467,13 +468,13 @@ npx expo start --clear
 
 ## Migration Guides
 
-### SDK 49 to SDK 50
+### SDK 53 to SDK 54
 
 #### Breaking Changes
 
 ```bash
-# Update to SDK 50
-npx expo install --sdk-version 50
+# Update to SDK 54
+npx expo install --sdk-version 54
 
 # Fix breaking changes
 npx expo install --fix
@@ -481,7 +482,7 @@ npx expo install --fix
 
 #### Key Changes
 
-- **React Native**: Updated to 0.73.x
+- **React Native**: Updated to 0.76.x
 - **New Features**: New Expo modules
 - **Deprecated APIs**: Some APIs deprecated
 - **Performance**: Improved performance
@@ -490,7 +491,7 @@ npx expo install --fix
 
 ```bash
 # 1. Update SDK
-npx expo install --sdk-version 50
+npx expo install --sdk-version 54
 
 # 2. Update dependencies
 npx expo install --fix
@@ -504,13 +505,13 @@ npx expo install --fix
 npx expo start
 ```
 
-### SDK 48 to SDK 49
+### SDK 52 to SDK 53
 
 #### Breaking Changes
 
 ```bash
-# Update to SDK 49
-npx expo install --sdk-version 49
+# Update to SDK 53
+npx expo install --sdk-version 53
 
 # Fix breaking changes
 npx expo install --fix
@@ -518,18 +519,18 @@ npx expo install --fix
 
 #### Key Changes
 
-- **React Native**: Updated to 0.72.x
+- **React Native**: Updated to 0.75.x
 - **New Features**: New Expo modules
 - **Deprecated APIs**: Some APIs deprecated
 - **Performance**: Improved performance
 
-### SDK 47 to SDK 48
+### SDK 51 to SDK 52
 
 #### Breaking Changes
 
 ```bash
-# Update to SDK 48
-npx expo install --sdk-version 48
+# Update to SDK 52
+npx expo install --sdk-version 52
 
 # Fix breaking changes
 npx expo install --fix
@@ -537,7 +538,7 @@ npx expo install --fix
 
 #### Key Changes
 
-- **React Native**: Updated to 0.71.x
+- **React Native**: Updated to 0.74.x
 - **New Features**: New Expo modules
 - **Deprecated APIs**: Some APIs deprecated
 - **Performance**: Improved performance
@@ -796,7 +797,7 @@ npx expo --version
 npx expo install --fix
 
 # Update to specific version
-npx expo install --sdk-version 50
+npx expo install --sdk-version 54
 
 # Check for issues
 npx expo doctor
@@ -812,10 +813,10 @@ npx expo install --fix
 
 | SDK Version | React Native | Node.js | Status        |
 | ----------- | ------------ | ------- | ------------- |
-| **50**      | 0.73.x       | 18+     | ✅ Current    |
-| **49**      | 0.72.x       | 18+     | ✅ Stable     |
-| **48**      | 0.71.x       | 16+     | ⚠️ Deprecated |
-| **47**      | 0.70.x       | 16+     | ❌ EOL        |
+| **54**      | 0.76.x       | 18+     | ✅ Current    |
+| **53**      | 0.75.x       | 18+     | ✅ Stable     |
+| **52**      | 0.74.x       | 18+     | ✅ Stable     |
+| **51**      | 0.74.x       | 18+     | ⚠️ Deprecated |
 
 ### Update Checklist
 
