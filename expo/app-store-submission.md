@@ -119,7 +119,29 @@ assets/
 
 ## App Store Submission (iOS)
 
-### Step 1: App Store Connect Setup
+### Step 1: Build Your App First
+
+#### Create iOS Build
+
+```bash
+# Build for App Store
+eas build --platform ios --profile production
+
+# Check build status
+eas build:list --platform ios
+
+# Download build when ready
+eas build:download [BUILD_ID]
+```
+
+#### Verify Build
+
+- **Build Status**: Ensure build completed successfully
+- **Build Size**: Check if build size is reasonable
+- **Build Logs**: Review logs for any warnings or errors
+- **Test Build**: Test the build on device if possible
+
+### Step 2: App Store Connect Setup
 
 #### Create App Record
 
@@ -138,7 +160,7 @@ assets/
      - **SKU**: Unique identifier (e.g., "myapp-ios-001")
      - **User Access**: Full Access
 
-### Step 2: App Information Configuration
+### Step 3: App Information Configuration
 
 #### App Information
 
@@ -170,7 +192,7 @@ assets/
 - **Age Rating**: Complete rating questionnaire
 - **App Review Information**: Demo account and notes
 
-### Step 3: Build and Upload
+### Step 4: Build and Upload
 
 #### Using EAS Build
 
@@ -195,7 +217,7 @@ eas build:download [BUILD_ID]
 # Use Xcode or Application Loader
 ```
 
-### Step 4: App Store Connect Configuration
+### Step 5: App Store Connect Configuration
 
 #### App Information
 
@@ -248,7 +270,7 @@ productivity, task management, organization, reminders, todo, planner, efficienc
 - **iPad Pro 12.9"**: 2048x2732 pixels
 - **iPad Pro 11"**: 1668x2388 pixels
 
-### Step 5: App Review Submission
+### Step 6: App Review Submission
 
 #### Review Information
 
