@@ -8,6 +8,7 @@ This directory contains comprehensive guides for React Native development using 
 - [Expo Go Updates & OTA](./expo-go-updates.md) - Detailed guide for pushing updates, OTA updates, and version management
 - [app.json Configuration](./app-json-configuration.md) - Complete guide for configuring your Expo app with app.json
 - [EAS Build & Deployment](./eas-build-deployment.md) - Complete guide for EAS builds, APK production, and deployment strategies
+- [App Store Submission](./app-store-submission.md) - Complete guide for submitting to App Store and Google Play Store
 
 ## 🚀 Quick Start
 
