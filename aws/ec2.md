@@ -460,7 +460,7 @@ For detailed CloudWatch configuration including:
 - ✅ **Custom metrics** from applications
 - ✅ **Performance optimization** and troubleshooting
 
-**See the dedicated [AWS CloudWatch Guide](../AWS%20CloudWatch/README.md) for comprehensive monitoring setup.**
+**See the dedicated [AWS CloudWatch Guide](./cloudwatch.md) for comprehensive monitoring setup.**
 
 ---
 
@@ -594,8 +594,8 @@ For production environments, we strongly recommend setting up **AWS CloudWatch**
 - ✅ **Cost monitoring** and optimization
 - ✅ **Security monitoring** and compliance
 
-**See the dedicated [AWS CloudWatch Guide](../AWS%20CloudWatch/README.md) for complete monitoring setup including dashboards, alarms, log insights, and custom metrics.**
+**See the dedicated [AWS CloudWatch Guide](./cloudwatch.md) for complete monitoring setup including dashboards, alarms, log insights, and custom metrics.**
 
 ---
 
-_Need help? Check the [main guides](../README.md) or create an issue in your repository._
+_Need help? Check the [AWS guides](./README.md) or create an issue in your repository._

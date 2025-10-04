@@ -368,7 +368,7 @@ Your logs are now being sent to CloudWatch! You can:
 1. **Set up log retention** to manage costs
 2. **Create log-based metrics** for monitoring
 3. **Set up basic alerts** for errors
-4. **Explore advanced features** in the [full CloudWatch guide](../AWS%20CloudWatch/README.md)
+4. **Explore advanced features** in the [full CloudWatch guide](./cloudwatch.md)
 
 ### Log Retention
 
@@ -379,4 +379,4 @@ aws logs put-retention-policy --log-group-name "/aws/ec2/my-app" --retention-in-
 
 ---
 
-_Need help? Check the [main guides](../README.md) or refer to the [AWS CloudWatch Logs documentation](https://docs.aws.amazon.com/cloudwatch/latest/logs/)._
+_Need help? Check the [AWS guides](./README.md) or refer to the [AWS CloudWatch Logs documentation](https://docs.aws.amazon.com/cloudwatch/latest/logs/)._

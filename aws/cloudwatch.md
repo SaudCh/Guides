@@ -2,7 +2,7 @@
 
 This **advanced guide** explains how to set up comprehensive monitoring, logging, alerting, and performance optimization for your AWS infrastructure using **CloudWatch** with PM2, NGINX, and custom applications.
 
-> 💡 **New to CloudWatch?** Start with the [simple CloudWatch Logs guide](../AWS%20CloudWatch%20Logs/README.md) for basic logging setup.
+> 💡 **New to CloudWatch?** Start with the [simple CloudWatch Logs guide](./cloudwatch%20logs.md) for basic logging setup.
 
 ## 📋 Table of Contents
 
@@ -29,7 +29,7 @@ This **advanced guide** explains how to set up comprehensive monitoring, logging
 - EC2 instance with your application running
 - PM2 process manager installed
 - NGINX web server (optional)
-- **Basic CloudWatch Logs setup** (see [simple guide](../AWS%20CloudWatch%20Logs/README.md))
+- **Basic CloudWatch Logs setup** (see [simple guide](./cloudwatch%20logs.md))
 - Intermediate knowledge of AWS services and Linux commands
 - Understanding of monitoring concepts and alerting
 
@@ -1150,4 +1150,4 @@ Your CloudWatch monitoring system is now fully configured with:
 
 ---
 
-_Need help? Check the [main guides](../README.md) or refer to the [AWS CloudWatch documentation](https://docs.aws.amazon.com/cloudwatch/)._
+_Need help? Check the [AWS guides](./README.md) or refer to the [AWS CloudWatch documentation](https://docs.aws.amazon.com/cloudwatch/)._

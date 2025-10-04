@@ -543,4 +543,4 @@ Your React/Vite app is now successfully deployed on AWS Amplify with:
 
 ---
 
-_Need help? Check the [main guides](../README.md) or refer to the [AWS Amplify documentation](https://docs.aws.amazon.com/amplify/)._
+_Need help? Check the [AWS guides](./README.md) or refer to the [AWS Amplify documentation](https://docs.aws.amazon.com/amplify/)._
