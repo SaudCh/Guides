@@ -10,6 +10,7 @@ This directory contains comprehensive guides for React Native development using 
 - [EAS Build & Deployment](./eas-build-deployment.md) - Complete guide for EAS builds, APK production, and deployment strategies
 - [App Store Submission](./app-store-submission.md) - Complete guide for submitting to App Store and Google Play Store
 - [Expo Updates & Downgrades](./expo-updates-downgrades.md) - Complete guide for updating/downgrading Expo SDK and managing dependencies
+- [EAS Commands Reference](./eas-commands-reference.md) - Complete reference for all EAS CLI commands and their usage
 
 ## 🚀 Quick Start
 
