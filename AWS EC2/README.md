@@ -15,7 +15,9 @@ This guide explains how to deploy a Node.js backend on **AWS EC2** with **GitHub
 - [Step 8: Add Domain DNS Record](#-step-8-add-domain-dns-record)
 - [Step 9: Install & Configure NGINX](#-step-9-install--configure-nginx)
 - [Step 10: Setup SSL with Certbot](#-step-10-setup-ssl-with-certbot)
-- [Step 11: Finalize Workflow](#-step-11-finalize-workflow)
+- [Step 11: Setup CloudWatch for PM2 Logs](#-step-11-setup-cloudwatch-for-pm2-logs)
+- [Step 12: Finalize Workflow](#-step-12-finalize-workflow)
+- [Monitoring & Alerting](#-monitoring--alerting)
 - [Troubleshooting](#-troubleshooting)
 
 ---
@@ -394,7 +396,75 @@ sudo crontab -e
 
 ---
 
-## ✅ Step 11: Finalize Workflow
+## 📊 Step 11: Setup Monitoring & Logging
+
+For comprehensive monitoring, logging, and alerting, we recommend setting up **AWS CloudWatch**. This provides:
+
+- **Centralized log collection** from PM2, NGINX, and system logs
+- **Real-time metrics monitoring** (CPU, memory, disk, network)
+- **Automated alerting** with SNS notifications
+- **Custom dashboards** for visualization
+- **Log analysis** with CloudWatch Insights
+
+### Quick Setup
+
+1. **Install CloudWatch Agent**:
+
+```bash
+wget https://s3.amazonaws.com/amazoncloudwatch-agent/ubuntu/amd64/latest/amazon-cloudwatch-agent.deb
+sudo dpkg -i amazon-cloudwatch-agent.deb
+```
+
+2. **Create IAM Role** with CloudWatch permissions
+3. **Configure log collection** for PM2 and NGINX logs
+4. **Set up alerts** for CPU, memory, and disk usage
+
+### Enhanced PM2 Logging
+
+Update your PM2 ecosystem file for better log management:
+
+```javascript
+module.exports = {
+  apps: [
+    {
+      name: "my-app",
+      script: "index.js",
+      instances: 1,
+      autorestart: true,
+      watch: false,
+      max_memory_restart: "1G",
+      env: {
+        NODE_ENV: "production",
+      },
+      // Enhanced logging
+      log_type: "json",
+      log_date_format: "YYYY-MM-DD HH:mm:ss Z",
+      time: true,
+      merge_logs: true,
+      log_rotate_max_size: "10M",
+      log_rotate_retain: 5,
+    },
+  ],
+};
+```
+
+### Complete CloudWatch Setup
+
+For detailed CloudWatch configuration including:
+
+- ✅ **Complete agent setup** and configuration
+- ✅ **Log group creation** and management
+- ✅ **Dashboard creation** and customization
+- ✅ **Alarm setup** with SNS notifications
+- ✅ **Log Insights queries** for analysis
+- ✅ **Custom metrics** from applications
+- ✅ **Performance optimization** and troubleshooting
+
+**See the dedicated [AWS CloudWatch Guide](../AWS%20CloudWatch/README.md) for comprehensive monitoring setup.**
+
+---
+
+## ✅ Step 12: Finalize Workflow
 
 The GitHub Actions workflow is already configured to restart your application. The workflow will:
 
@@ -416,7 +486,7 @@ git pull origin main
 yarn install
 
 # Restart application
-pm2 restart all
+    pm2 restart all
 ```
 
 ---
@@ -481,6 +551,50 @@ sudo systemctl status nginx
 # Test NGINX config
 sudo nginx -t
 ```
+
+---
+
+## 📊 Monitoring & Alerting
+
+For comprehensive monitoring and alerting, we recommend using **AWS CloudWatch**. This provides enterprise-grade monitoring capabilities including:
+
+- **Real-time dashboards** for system and application metrics
+- **Automated alerting** with email/SMS notifications
+- **Log analysis** with powerful query capabilities
+- **Custom metrics** from your applications
+- **Performance monitoring** and optimization insights
+
+### Quick Monitoring Setup
+
+1. **Basic health monitoring**:
+
+```bash
+# Simple health check script
+pm2 status
+curl -f http://localhost:3000/health || echo "Health check failed"
+```
+
+2. **Resource monitoring**:
+
+```bash
+# Check system resources
+top -bn1 | head -20
+df -h
+free -h
+```
+
+### Complete Monitoring Solution
+
+For production environments, we strongly recommend setting up **AWS CloudWatch** for:
+
+- ✅ **Centralized log collection** and analysis
+- ✅ **Real-time metrics** and dashboards
+- ✅ **Automated alerting** and notifications
+- ✅ **Performance optimization** insights
+- ✅ **Cost monitoring** and optimization
+- ✅ **Security monitoring** and compliance
+
+**See the dedicated [AWS CloudWatch Guide](../AWS%20CloudWatch/README.md) for complete monitoring setup including dashboards, alarms, log insights, and custom metrics.**
 
 ---
 
