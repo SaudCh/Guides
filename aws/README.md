@@ -4,23 +4,23 @@ A comprehensive collection of guides for deploying applications on AWS infrastru
 
 ## 📚 Available Guides
 
-| Guide                                                 | Description                                                  | Difficulty   |
-| ----------------------------------------------------- | ------------------------------------------------------------ | ------------ |
-| [AWS EC2 Deployment](./ec2.md)                        | Deploy Node.js apps with GitHub Actions, PM2, and NGINX      | Intermediate |
-| [AWS EC2 Multi-Branch CI/CD](./ec2%20multi-branch.md) | Multi-environment CI/CD pipeline for Development and Staging | Advanced     |
-| [AWS S3 Setup](./s3.md)                               | Configure S3 buckets, IAM policies, and file management      | Beginner     |
-| [AWS Amplify Hosting](./amplify.md)                   | Host React/Vite apps with automatic CI/CD and custom domains | Beginner     |
-| [AWS CloudWatch Logs](./cloudwatch%20logs.md)         | Simple setup for sending logs to CloudWatch                  | Beginner     |
-| [AWS CloudWatch Monitoring](./cloudwatch.md)          | Advanced monitoring, alerting, and performance optimization  | Advanced     |
+| Guide                                             | Description                                                  | Difficulty   |
+| ------------------------------------------------- | ------------------------------------------------------------ | ------------ |
+| [EC2 Deployment](./ec2.md)                        | Deploy Node.js apps with GitHub Actions, PM2, and NGINX      | Intermediate |
+| [EC2 Multi-Branch CI/CD](./ec2%20multi-branch.md) | Multi-environment CI/CD pipeline for Development and Staging | Advanced     |
+| [S3 Setup](./s3.md)                               | Configure S3 buckets, IAM policies, and file management      | Beginner     |
+| [Amplify Hosting](./amplify.md)                   | Host React/Vite apps with automatic CI/CD and custom domains | Beginner     |
+| [CloudWatch Logs](./cloudwatch%20logs.md)         | Simple setup for sending logs to CloudWatch                  | Beginner     |
+| [CloudWatch Monitoring](./cloudwatch.md)          | Advanced monitoring, alerting, and performance optimization  | Advanced     |
 
 ## 🚀 Quick Start
 
-1. **For Frontend Hosting**: Start with the [AWS Amplify guide](./amplify.md)
-2. **For Backend Deployment**: Follow the [AWS EC2 guide](./ec2.md)
-3. **For Multi-Environment CI/CD**: Use the [AWS EC2 Multi-Branch guide](./ec2%20multi-branch.md)
-4. **For File Storage**: Use the [AWS S3 setup guide](./s3.md)
-5. **For Basic Logging**: Set up [AWS CloudWatch Logs](./cloudwatch%20logs.md)
-6. **For Advanced Monitoring**: Use [AWS CloudWatch Monitoring](./cloudwatch.md)
+1. **For Frontend Hosting**: Start with the [Amplify guide](./amplify.md)
+2. **For Backend Deployment**: Follow the [EC2 guide](./ec2.md)
+3. **For Multi-Environment CI/CD**: Use the [EC2 Multi-Branch guide](./ec2%20multi-branch.md)
+4. **For File Storage**: Use the [S3 setup guide](./s3.md)
+5. **For Basic Logging**: Set up [CloudWatch Logs](./cloudwatch%20logs.md)
+6. **For Advanced Monitoring**: Use [CloudWatch Monitoring](./cloudwatch.md)
 
 ## 📋 Prerequisites
 
