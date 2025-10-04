@@ -1,72 +1,134 @@
-# ServiceHub Assets – AWS S3 Setup  
+# AWS S3 Setup for File Management
 
-This guide explains how to configure an **AWS S3 bucket**, **IAM policy**, and **IAM user** for managing assets in the ServiceHub project.  
+This guide explains how to configure an **AWS S3 bucket**, **IAM policy**, and **IAM user** for secure file upload, download, and management in your applications.
+
+## 📋 Table of Contents
+
+- [Prerequisites](#-prerequisites)
+- [Step 1: Create an S3 Bucket](#-step-1-create-an-s3-bucket)
+- [Step 2: Create an IAM Policy](#-step-2-create-an-iam-policy)
+- [Step 3: Create an IAM User](#-step-3-create-an-iam-user)
+- [Step 4: Configure Environment Variables](#-step-4-configure-environment-variables)
+- [Step 5: Update Bucket Permissions](#-step-5-update-bucket-permissions)
+- [Step 6: Example Usage in Node.js](#-step-6-example-usage-in-nodejs)
+- [Security Best Practices](#-security-best-practices)
+- [Troubleshooting](#-troubleshooting)
 
 ---
 
 ## 🚀 Prerequisites
-- AWS account with access to **S3** and **IAM**.  
-- Admin permissions to create buckets, policies, and users.  
-- Node.js project with `.env` support (e.g., using dotenv).  
+
+- AWS Account with access to **S3** and **IAM**
+- Admin permissions to create buckets, policies, and users
+- Node.js project with `.env` support (e.g., using dotenv)
+- Basic understanding of AWS services
 
 ---
 
 ## 📦 Step 1: Create an S3 Bucket
-1. Go to **S3** → **Create bucket**.
-3. Enter the Bucket name:  
-   ```
-   bucket-name
-   ```  
-4. Region:  
-   ```
-   region
-   ```  
-5. Click **Create bucket**.  
+
+1. **Log in to AWS Console** and navigate to **S3**
+2. **Click "Create bucket"**
+3. **Configure bucket settings**:
+   - **Bucket name**: `your-unique-bucket-name` (must be globally unique)
+   - **Region**: Choose the closest region to your users (e.g., `us-east-1`)
+   - **Object Ownership**: ACLs disabled (recommended)
+   - **Block Public Access**: Keep all settings checked for now (we'll configure later)
+   - **Bucket Versioning**: Enable if you want file versioning
+   - **Default encryption**: Enable (recommended)
+4. **Click "Create bucket"**
+
+> ⚠️ **Important**: Bucket names must be globally unique across all AWS accounts.
 
 ---
 
 ## 🔑 Step 2: Create an IAM Policy
-1. Go to **IAM** → **Policies** → **Create policy**.  
-2. Choose **Service** → **S3**.  
-3. Allow the following actions:  
-   - `s3:GetObject`  
-   - `s3:PutObject`  
-   - `s3:DeleteObject`  
-4. Select **Specific resources** → Add your bucket ARN.  
-5. Name the policy:
-   ```
-   policy-name
-   ```  
+
+1. **Go to IAM Console** → **Policies** → **Create policy**
+2. **Click "JSON" tab** and paste the following policy:
+
+```json
+{
+  "Version": "2012-10-17",
+  "Statement": [
+    {
+      "Effect": "Allow",
+      "Action": [
+        "s3:GetObject",
+        "s3:PutObject",
+        "s3:DeleteObject",
+        "s3:ListBucket"
+      ],
+      "Resource": [
+        "arn:aws:s3:::your-bucket-name",
+        "arn:aws:s3:::your-bucket-name/*"
+      ]
+    }
+  ]
+}
+```
+
+3. **Replace `your-bucket-name`** with your actual bucket name
+4. **Click "Next: Tags"** (optional)
+5. **Click "Next: Review"**
+6. **Name the policy**: `S3FileManagementPolicy`
+7. **Add description**: `Policy for S3 file upload, download, and deletion`
+8. **Click "Create policy"**
 
 ---
 
 ## 👤 Step 3: Create an IAM User
-1. Go to **IAM** → **Users** → **Create user**.  
-2. Enter a username.  
-3. Attach the policy `policy-name`.  
-4. After creating the user, open it and create an **Access Key**:  
-   - Choose **Other** as the use case.  
-   - Copy the **Access Key** and **Secret Key**.  
+
+1. **Go to IAM Console** → **Users** → **Create user**
+2. **Enter username**: `s3-file-manager`
+3. **Select "Programmatic access"** (for API access)
+4. **Click "Next: Permissions"**
+5. **Attach existing policies directly**
+6. **Search and select**: `S3FileManagementPolicy` (the policy we created)
+7. **Click "Next: Tags"** (optional)
+8. **Click "Next: Review"**
+9. **Click "Create user"**
+10. **Create Access Key**:
+    - Click on the created user
+    - Go to **Security credentials** tab
+    - Click **"Create access key"**
+    - Choose **"Other"** as use case
+    - Add description: `S3 file management access`
+    - **Copy and save** both Access Key ID and Secret Access Key
+
+> ⚠️ **Important**: Save these credentials securely - you won't be able to see the secret key again.
 
 ---
 
 ## ⚙️ Step 4: Configure Environment Variables
-Add credentials to your project’s `.env`:  
+
+Add the following variables to your project's `.env` file:
 
 ```env
-AWS_ACCESS_KEY_ID=your-access-key
-AWS_SECRET_ACCESS_KEY=your-secret-key
-AWS_REGION=eu-west-2
-AWS_S3_BUCKET=bucket-name
+# AWS S3 Configuration
+AWS_ACCESS_KEY_ID=your-access-key-id
+AWS_SECRET_ACCESS_KEY=your-secret-access-key
+AWS_REGION=us-east-1
+AWS_S3_BUCKET=your-bucket-name
+
+# Optional: S3 endpoint (for custom regions or local development)
+# AWS_S3_ENDPOINT=https://s3.us-east-1.amazonaws.com
 ```
+
+> ⚠️ **Security**: Never commit `.env` files to version control. Add `.env` to your `.gitignore`.
 
 ---
 
 ## 🔐 Step 5: Update Bucket Permissions
-1. Go to **S3** → select your bucket (`bucket-name`).  
-2. Open the **Permissions** tab.  
-3. Under **Block public access (bucket settings)** → click **Edit** → **Uncheck all options** → Save changes.  
-4. Scroll to **Bucket policy** → click **Edit** → paste the following policy:  
+
+### Option A: Public Read Access (for public files)
+
+If you want files to be publicly accessible:
+
+1. **Go to S3 Console** → Select your bucket
+2. **Open "Permissions" tab**
+3. **Edit "Block public access"** → Uncheck all options → Save
+4. **Add bucket policy** (replace `your-bucket-name`):
 
 ```json
 {
@@ -75,98 +137,267 @@ AWS_S3_BUCKET=bucket-name
     {
       "Effect": "Allow",
       "Principal": "*",
-      "Action": [
-        "s3:GetObject",
-        "s3:DeleteObject"
-      ],
-      "Resource": "arn:aws:s3:::bucket-name/*"
+      "Action": "s3:GetObject",
+      "Resource": "arn:aws:s3:::your-bucket-name/*"
     }
   ]
 }
 ```
 
-> Replace `arn:aws:s3:::bucket-name` with the actual bucket ARN (visible in your bucket’s **Properties** tab).  
+### Option B: Private Access (Recommended)
+
+For better security, keep files private and use signed URLs:
+
+1. **Keep "Block public access" enabled**
+2. **No bucket policy needed**
+3. **Use signed URLs for temporary access** (see code examples below)
 
 ---
 
 ## 📤 Step 6: Example Usage in Node.js
-Install AWS SDK v3:  
+
+### Install Dependencies
+
 ```bash
-npm install @aws-sdk/client-s3
+npm install @aws-sdk/client-s3 @aws-sdk/s3-request-presigner
 ```
 
-### Upload File
-```js
-import { S3Client, PutObjectCommand } from "@aws-sdk/client-s3";
-import fs from "fs";
+### Setup S3 Client
 
-const s3 = new S3Client({
+Create `s3Client.js`:
+
+```js
+import { S3Client } from "@aws-sdk/client-s3";
+import dotenv from "dotenv";
+
+dotenv.config();
+
+export const s3Client = new S3Client({
   region: process.env.AWS_REGION,
   credentials: {
     accessKeyId: process.env.AWS_ACCESS_KEY_ID,
     secretAccessKey: process.env.AWS_SECRET_ACCESS_KEY,
   },
 });
-
-export const uploadFile = async (filePath, fileName) => {
-  const fileContent = fs.readFileSync(filePath);
-
-  const command = new PutObjectCommand({
-    Bucket: process.env.AWS_S3_BUCKET,
-    Key: fileName,
-    Body: fileContent,
-    ContentType: "application/octet-stream",
-  });
-
-  await s3.send(command);
-  console.log(`${fileName} uploaded successfully ✅`);
-};
 ```
 
-Usage:  
+### Upload File
+
 ```js
-uploadFile("./local-file.png", "uploads/file.png");
+import { PutObjectCommand } from "@aws-sdk/client-s3";
+import { s3Client } from "./s3Client.js";
+import fs from "fs";
+import path from "path";
+
+/**
+ * Upload a file to S3
+ * @param {string} filePath - Local file path
+ * @param {string} s3Key - S3 object key (file path in bucket)
+ * @param {string} contentType - MIME type (optional)
+ * @returns {Promise<string>} - S3 object URL
+ */
+export const uploadFile = async (filePath, s3Key, contentType = null) => {
+  try {
+    const fileContent = fs.readFileSync(filePath);
+
+    // Auto-detect content type if not provided
+    if (!contentType) {
+      const ext = path.extname(filePath).toLowerCase();
+      const mimeTypes = {
+        ".jpg": "image/jpeg",
+        ".jpeg": "image/jpeg",
+        ".png": "image/png",
+        ".gif": "image/gif",
+        ".pdf": "application/pdf",
+        ".txt": "text/plain",
+        ".json": "application/json",
+      };
+      contentType = mimeTypes[ext] || "application/octet-stream";
+    }
+
+    const command = new PutObjectCommand({
+      Bucket: process.env.AWS_S3_BUCKET,
+      Key: s3Key,
+      Body: fileContent,
+      ContentType: contentType,
+      ACL: "private", // Keep files private
+    });
+
+    await s3Client.send(command);
+
+    const fileUrl = `https://${process.env.AWS_S3_BUCKET}.s3.${process.env.AWS_REGION}.amazonaws.com/${s3Key}`;
+    console.log(`✅ File uploaded: ${fileUrl}`);
+
+    return fileUrl;
+  } catch (error) {
+    console.error("❌ Upload failed:", error);
+    throw error;
+  }
+};
+
+// Usage example
+// await uploadFile('./uploads/image.jpg', 'images/photo-123.jpg');
 ```
 
 ---
 
-## 📥 Download File
+## 📥 Download File (Signed URL)
+
 ```js
 import { GetObjectCommand } from "@aws-sdk/client-s3";
 import { getSignedUrl } from "@aws-sdk/s3-request-presigner";
+import { s3Client } from "./s3Client.js";
 
-export const downloadFile = async (fileName) => {
-  const command = new GetObjectCommand({
-    Bucket: process.env.AWS_S3_BUCKET,
-    Key: fileName,
-  });
+/**
+ * Generate a signed URL for downloading a file
+ * @param {string} s3Key - S3 object key
+ * @param {number} expiresIn - URL expiration time in seconds (default: 1 hour)
+ * @returns {Promise<string>} - Signed URL
+ */
+export const getDownloadUrl = async (s3Key, expiresIn = 3600) => {
+  try {
+    const command = new GetObjectCommand({
+      Bucket: process.env.AWS_S3_BUCKET,
+      Key: s3Key,
+    });
 
-  const url = await getSignedUrl(s3, command, { expiresIn: 3600 });
-  console.log(`Download file from: ${url}`);
+    const signedUrl = await getSignedUrl(s3Client, command, {
+      expiresIn,
+    });
+
+    console.log(`🔗 Download URL generated: ${signedUrl}`);
+    return signedUrl;
+  } catch (error) {
+    console.error("❌ Failed to generate download URL:", error);
+    throw error;
+  }
 };
+
+// Usage example
+// const downloadUrl = await getDownloadUrl('images/photo-123.jpg', 3600);
 ```
 
 ---
 
 ## 🗑️ Delete File
+
 ```js
 import { DeleteObjectCommand } from "@aws-sdk/client-s3";
+import { s3Client } from "./s3Client.js";
 
-export const deleteFile = async (fileName) => {
-  const command = new DeleteObjectCommand({
-    Bucket: process.env.AWS_S3_BUCKET,
-    Key: fileName,
-  });
+/**
+ * Delete a file from S3
+ * @param {string} s3Key - S3 object key to delete
+ * @returns {Promise<boolean>} - Success status
+ */
+export const deleteFile = async (s3Key) => {
+  try {
+    const command = new DeleteObjectCommand({
+      Bucket: process.env.AWS_S3_BUCKET,
+      Key: s3Key,
+    });
 
-  await s3.send(command);
-  console.log(`${fileName} deleted successfully ❌`);
+    await s3Client.send(command);
+    console.log(`✅ File deleted: ${s3Key}`);
+    return true;
+  } catch (error) {
+    console.error("❌ Delete failed:", error);
+    throw error;
+  }
 };
+
+// Usage example
+// await deleteFile('images/photo-123.jpg');
 ```
 
 ---
 
-## ✅ Done!
-You now have:  
-- An **S3 bucket** (`bucket-name`)  
-- An **IAM user** with access keys  
-- A working setup to **upload, download, and delete files** from S3 in Node.js 
+## 🔒 Security Best Practices
+
+### 1. Access Control
+
+- Use IAM policies with minimal required permissions
+- Rotate access keys regularly
+- Never commit credentials to version control
+
+### 2. Bucket Security
+
+- Enable versioning for important files
+- Enable server-side encryption
+- Use bucket policies for fine-grained access control
+- Enable CloudTrail for audit logging
+
+### 3. File Security
+
+- Use signed URLs for temporary access
+- Implement file type validation
+- Set appropriate file size limits
+- Scan uploaded files for malware
+
+### 4. Monitoring
+
+- Set up CloudWatch alarms for unusual activity
+- Monitor access patterns and costs
+- Use AWS Config for compliance monitoring
+
+---
+
+## 🐛 Troubleshooting
+
+### Common Issues
+
+**Access Denied Error**:
+
+- Check IAM policy permissions
+- Verify bucket name and region
+- Ensure access keys are correct
+
+**File Not Found**:
+
+- Verify S3 key (file path) is correct
+- Check if file exists in bucket
+- Ensure proper permissions
+
+**Upload Fails**:
+
+- Check file size limits
+- Verify network connection
+- Check AWS service status
+
+### Debug Commands
+
+```bash
+# Test AWS credentials
+aws sts get-caller-identity
+
+# List S3 buckets
+aws s3 ls
+
+# List objects in bucket
+aws s3 ls s3://your-bucket-name/
+```
+
+---
+
+## ✅ Setup Complete!
+
+You now have a complete S3 file management system with:
+
+- ✅ **Secure S3 bucket** with proper permissions
+- ✅ **IAM user** with minimal required access
+- ✅ **Environment configuration** for your application
+- ✅ **Upload, download, and delete** functionality
+- ✅ **Signed URLs** for secure file access
+- ✅ **Error handling** and logging
+- ✅ **Security best practices** implemented
+
+### Next Steps
+
+1. **Test the setup** with sample files
+2. **Integrate** with your application
+3. **Set up monitoring** and alerts
+4. **Implement** additional security measures as needed
+
+---
+
+_Need help? Check the [main guides](../README.md) or refer to the [AWS S3 documentation](https://docs.aws.amazon.com/s3/)._
