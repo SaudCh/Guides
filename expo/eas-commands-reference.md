@@ -6,16 +6,17 @@ This comprehensive guide covers all EAS (Expo Application Services) commands, th
 
 1. [EAS CLI Installation & Setup](#eas-cli-installation--setup)
 2. [EAS Build Commands](#eas-build-commands)
-3. [EAS Submit Commands](#eas-submit-commands)
-4. [EAS Update Commands](#eas-update-commands)
-5. [EAS Credentials Commands](#eas-credentials-commands)
-6. [EAS Project Commands](#eas-project-commands)
-7. [EAS Configuration Commands](#eas-configuration-commands)
-8. [EAS Webhook Commands](#eas-webhook-commands)
-9. [EAS Device Commands](#eas-device-commands)
-10. [Advanced EAS Commands](#advanced-eas-commands)
-11. [EAS Command Options](#eas-command-options)
-12. [Troubleshooting](#troubleshooting)
+3. [Development Builds](#development-builds)
+4. [EAS Submit Commands](#eas-submit-commands)
+5. [EAS Update Commands](#eas-update-commands)
+6. [EAS Credentials Commands](#eas-credentials-commands)
+7. [EAS Project Commands](#eas-project-commands)
+8. [EAS Configuration Commands](#eas-configuration-commands)
+9. [EAS Webhook Commands](#eas-webhook-commands)
+10. [EAS Device Commands](#eas-device-commands)
+11. [Advanced EAS Commands](#advanced-eas-commands)
+12. [EAS Command Options](#eas-command-options)
+13. [Troubleshooting](#troubleshooting)
 
 ---
 
@@ -170,6 +171,196 @@ eas build:cancel [BUILD_ID]
 # Cancel all pending builds
 eas build:cancel --all
 ```
+
+### Development Builds
+
+#### What are Development Builds?
+
+Development builds are custom builds of your app that include the Expo development client, allowing you to:
+
+- **Test native code changes** without publishing
+- **Use custom native modules** not available in Expo Go
+- **Debug native functionality** with full access to device APIs
+- **Test on physical devices** with development tools
+
+#### Create Development Build
+
+```bash
+# Create development build for iOS
+eas build --platform ios --profile development
+
+# Create development build for Android
+eas build --platform android --profile development
+
+# Create development build for all platforms
+eas build --platform all --profile development
+```
+
+#### Development Build Configuration
+
+```json
+{
+  "build": {
+    "development": {
+      "developmentClient": true,
+      "distribution": "internal",
+      "ios": {
+        "resourceClass": "m-medium",
+        "simulator": true
+      },
+      "android": {
+        "buildType": "apk",
+        "gradleCommand": ":app:assembleDebug"
+      }
+    }
+  }
+}
+```
+
+#### Install Development Build
+
+```bash
+# Download development build
+eas build:download [BUILD_ID]
+
+# Install on iOS device
+# Use Xcode or Apple Configurator 2
+
+# Install on Android device
+adb install path/to/your-app.apk
+```
+
+#### Run Development Build
+
+```bash
+# Start development server
+npx expo start --dev-client
+
+# Start with specific platform
+npx expo start --dev-client --ios
+npx expo start --dev-client --android
+
+# Start with tunnel
+npx expo start --dev-client --tunnel
+```
+
+#### Development Build Features
+
+- **Hot Reloading**: Instant code changes
+- **Debug Menu**: Access to debugging tools
+- **Native Modules**: Full access to native functionality
+- **Custom Configurations**: Use custom app.json settings
+- **Development Tools**: React Native debugger, Flipper, etc.
+
+#### Advanced Development Build Configuration
+
+```json
+{
+  "build": {
+    "development": {
+      "developmentClient": true,
+      "distribution": "internal",
+      "ios": {
+        "resourceClass": "m-medium",
+        "simulator": true,
+        "buildConfiguration": "Debug",
+        "scheme": "MyApp-Development"
+      },
+      "android": {
+        "buildType": "apk",
+        "gradleCommand": ":app:assembleDebug",
+        "buildVariant": "debug"
+      },
+      "env": {
+        "EXPO_PUBLIC_DEBUG": "true",
+        "EXPO_PUBLIC_API_URL": "https://dev-api.example.com"
+      }
+    }
+  }
+}
+```
+
+#### Development Build vs Expo Go
+
+| Feature            | Development Build | Expo Go      |
+| ------------------ | ----------------- | ------------ |
+| **Native Modules** | ✅ Full access    | ❌ Limited   |
+| **Custom Config**  | ✅ Full control   | ❌ Limited   |
+| **Debug Tools**    | ✅ Full access    | ❌ Limited   |
+| **Hot Reloading**  | ✅ Yes            | ✅ Yes       |
+| **Build Time**     | ⏱️ 10-15 minutes  | ⚡ Instant   |
+| **Installation**   | 📱 Manual install | 📱 App store |
+
+#### Development Build Workflow
+
+```bash
+# 1. Create development build
+eas build --platform ios --profile development
+
+# 2. Download and install build
+eas build:download [BUILD_ID]
+
+# 3. Start development server
+npx expo start --dev-client
+
+# 4. Open development build on device
+# Scan QR code or enter URL manually
+
+# 5. Develop with full native access
+# Make changes, test native modules, debug
+```
+
+#### Development Build Troubleshooting
+
+```bash
+# Development build not connecting
+npx expo start --dev-client --clear
+
+# Development build crashes
+npx expo start --dev-client --reset-cache
+
+# Development build outdated
+eas build --platform ios --profile development --clear-cache
+
+# Check development build status
+eas build:list --platform ios --profile development
+```
+
+#### Development Build Best Practices
+
+1. **Use for Native Development**
+
+   ```bash
+   # When you need native modules
+   eas build --platform ios --profile development
+   ```
+
+2. **Test on Physical Devices**
+
+   ```bash
+   # Always test on real devices
+   npx expo start --dev-client
+   ```
+
+3. **Use Environment Variables**
+
+   ```json
+   {
+     "build": {
+       "development": {
+         "env": {
+           "EXPO_PUBLIC_DEBUG": "true"
+         }
+       }
+     }
+   }
+   ```
+
+4. **Keep Builds Updated**
+   ```bash
+   # Rebuild when adding native modules
+   eas build --platform all --profile development
+   ```
 
 ### Build Configuration
 

@@ -11,6 +11,7 @@ This directory contains comprehensive guides for React Native development using 
 - [App Store Submission](./app-store-submission.md) - Complete guide for submitting to App Store and Google Play Store
 - [Expo Updates & Downgrades](./expo-updates-downgrades.md) - Complete guide for updating/downgrading Expo SDK and managing dependencies
 - [EAS Commands Reference](./eas-commands-reference.md) - Complete reference for all EAS CLI commands and their usage
+- [Expo Prebuild Guide](./expo-prebuild-guide.md) - Complete guide for Expo prebuild, native code management, and custom configurations
 
 ## 🚀 Quick Start
 
