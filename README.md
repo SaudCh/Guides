@@ -12,9 +12,11 @@ Complete guides for deploying applications on AWS infrastructure including EC2, 
 
 ### 📱 Expo/React Native
 
-Comprehensive mobile development guides using Expo and React Native, covering everything from setup to deployment.
+Comprehensive mobile development guides using Expo and React Native, covering everything from setup to deployment, including in-app purchases and subscriptions.
 
 **[View Expo Guides →](./expo/)**
+
+**Featured:** [RevenueCat Subscriptions Guide](./expo/revenuecat-subscriptions.md) - Complete 2025 guide for implementing subscriptions
 
 ---
 

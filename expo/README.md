@@ -12,6 +12,7 @@ This directory contains comprehensive guides for React Native development using 
 - [Expo Updates & Downgrades](./expo-updates-downgrades.md) - Complete guide for updating/downgrading Expo SDK and managing dependencies
 - [EAS Commands Reference](./eas-commands-reference.md) - Complete reference for all EAS CLI commands and their usage
 - [Expo Prebuild Guide](./expo-prebuild-guide.md) - Complete guide for Expo prebuild, native code management, and custom configurations
+- [RevenueCat Subscriptions](./revenuecat-subscriptions.md) - Complete guide for implementing in-app subscriptions with RevenueCat (2025)
 
 ## 🚀 Quick Start
 
