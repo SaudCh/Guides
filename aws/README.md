@@ -12,6 +12,7 @@ A comprehensive collection of guides for deploying applications on AWS infrastru
 | [Amplify Hosting](./amplify.md)                   | Host React/Vite apps with automatic CI/CD and custom domains | Beginner     |
 | [CloudWatch Logs](./cloudwatch%20logs.md)         | Simple setup for sending logs to CloudWatch                  | Beginner     |
 | [CloudWatch Monitoring](./cloudwatch.md)          | Advanced monitoring, alerting, and performance optimization  | Advanced     |
+| [Lambda Deployment](./lambda.md)                  | Deploy serverless Node.js apps with Serverless Framework     | Intermediate |
 
 ## 🚀 Quick Start
 
@@ -21,6 +22,7 @@ A comprehensive collection of guides for deploying applications on AWS infrastru
 4. **For File Storage**: Use the [S3 setup guide](./s3.md)
 5. **For Basic Logging**: Set up [CloudWatch Logs](./cloudwatch%20logs.md)
 6. **For Advanced Monitoring**: Use [CloudWatch Monitoring](./cloudwatch.md)
+7. **For Serverless Apps**: Use the [Lambda guide](./lambda.md)
 
 ## 📋 Prerequisites
 
@@ -37,6 +39,7 @@ A comprehensive collection of guides for deploying applications on AWS infrastru
 - **S3 Integration**: Secure file upload, download, and management
 - **CloudWatch Logs**: Simple log collection and basic monitoring
 - **CloudWatch Monitoring**: Advanced dashboards, alerts, and optimization
+- **Lambda Deployment**: Serverless Node.js functions and APIs with CI/CD
 - **Security**: IAM policies, SSL certificates, and best practices
 - **Performance**: Process management, optimization, and troubleshooting
 
