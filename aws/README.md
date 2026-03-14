@@ -4,15 +4,16 @@ A comprehensive collection of guides for deploying applications on AWS infrastru
 
 ## 📚 Available Guides
 
-| Guide                                             | Description                                                  | Difficulty   |
-| ------------------------------------------------- | ------------------------------------------------------------ | ------------ |
-| [EC2 Deployment](./ec2.md)                        | Deploy Node.js apps with GitHub Actions, PM2, and NGINX      | Intermediate |
-| [EC2 Multi-Branch CI/CD](./ec2%20multi-branch.md) | Multi-environment CI/CD pipeline for Development and Staging | Advanced     |
-| [S3 Setup](./s3.md)                               | Configure S3 buckets, IAM policies, and file management      | Beginner     |
-| [Amplify Hosting](./amplify.md)                   | Host React/Vite apps with automatic CI/CD and custom domains | Beginner     |
-| [CloudWatch Logs](./cloudwatch%20logs.md)         | Simple setup for sending logs to CloudWatch                  | Beginner     |
-| [CloudWatch Monitoring](./cloudwatch.md)          | Advanced monitoring, alerting, and performance optimization  | Advanced     |
-| [Lambda Deployment](./lambda.md)                  | Deploy serverless Node.js apps with Serverless Framework     | Intermediate |
+| Guide                                                | Description                                                   | Difficulty   |
+| ---------------------------------------------------- | ------------------------------------------------------------- | ------------ |
+| [EC2 Deployment](./ec2.md)                           | Deploy Node.js apps with GitHub Actions, PM2, and NGINX       | Intermediate |
+| [EC2 Multi-Branch CI/CD](./ec2%20multi-branch.md)    | Multi-environment CI/CD pipeline for Development and Staging  | Advanced     |
+| [S3 Setup](./s3.md)                                  | Configure S3 buckets, IAM policies, and file management       | Beginner     |
+| [Amplify Hosting](./amplify.md)                      | Host React/Vite apps with automatic CI/CD and custom domains  | Beginner     |
+| [CloudWatch Logs](./cloudwatch%20logs.md)            | Simple setup for sending logs to CloudWatch                   | Beginner     |
+| [PM2 Logs with CloudWatch](./pm2-cloudwatch-logs.md) | Stream PM2 logs to CloudWatch with rotation, queries & alarms | Intermediate |
+| [CloudWatch Monitoring](./cloudwatch.md)             | Advanced monitoring, alerting, and performance optimization   | Advanced     |
+| [Lambda Deployment](./lambda.md)                     | Deploy serverless Node.js apps with Serverless Framework      | Intermediate |
 
 ## 🚀 Quick Start
 
@@ -21,8 +22,9 @@ A comprehensive collection of guides for deploying applications on AWS infrastru
 3. **For Multi-Environment CI/CD**: Use the [EC2 Multi-Branch guide](./ec2%20multi-branch.md)
 4. **For File Storage**: Use the [S3 setup guide](./s3.md)
 5. **For Basic Logging**: Set up [CloudWatch Logs](./cloudwatch%20logs.md)
-6. **For Advanced Monitoring**: Use [CloudWatch Monitoring](./cloudwatch.md)
-7. **For Serverless Apps**: Use the [Lambda guide](./lambda.md)
+6. **For PM2 Log Streaming**: Follow the [PM2 Logs with CloudWatch guide](./pm2-cloudwatch-logs.md)
+7. **For Advanced Monitoring**: Use [CloudWatch Monitoring](./cloudwatch.md)
+8. **For Serverless Apps**: Use the [Lambda guide](./lambda.md)
 
 ## 📋 Prerequisites
 
