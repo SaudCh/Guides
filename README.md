@@ -18,13 +18,20 @@ Comprehensive mobile development guides using Expo and React Native, covering ev
 
 **Featured:** [RevenueCat Subscriptions Guide](./expo/revenuecat-subscriptions.md) - Complete 2025 guide for implementing subscriptions
 
+### 🎬 FFmpeg
+
+Detailed guide for converting, editing, compressing, and streaming audio and video from the command line.
+
+**[View FFmpeg Guides →](./ffmpeg/)**
+
 ---
 
 ## 🚀 Quick Start
 
 1. **For AWS Deployment**: Check out our [AWS guides](./aws/) for complete cloud deployment solutions
 2. **For Mobile Development**: Check out our [Expo guides](./expo/) for React Native mobile app development
-3. **For React Development**: Coming soon - React development guides
+3. **For Video & Audio Processing**: See the [FFmpeg complete guide](./ffmpeg/complete-guide.md)
+4. **For React Development**: Coming soon - React development guides
 
 ---
 
@@ -44,6 +51,7 @@ Comprehensive mobile development guides using Expo and React Native, covering ev
 | ---------- | -------------- | ------------------------------------------------ |
 | **AWS**    | ✅ Complete    | Cloud deployment, monitoring, and infrastructure |
 | **Expo**   | ✅ Complete    | Mobile app development with React Native         |
+| **FFmpeg** | ✅ Complete    | Video/audio conversion, editing, and streaming   |
 | **React**  | 🚧 Coming Soon | Frontend development and best practices          |
 
 ---
@@ -60,4 +68,4 @@ Each guide includes:
 
 ---
 
-_Last updated: October 2025_
+_Last updated: May 2026_
