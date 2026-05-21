@@ -11,6 +11,7 @@ FFmpeg is the industry-standard toolkit for recording, converting, streaming, an
 - [Command Syntax](#-command-syntax)
 - [Common Tasks](#-common-tasks)
 - [Encoding & Quality](#-encoding--quality)
+- [Compressing Video File Size](#-compressing-video-file-size)
 - [Cutting, Concatenation & Timing](#-cutting-concatenation--timing)
 - [Audio Operations](#-audio-operations)
 - [Video Transformations](#-video-transformations)
@@ -361,6 +362,333 @@ ffmpeg -i input.mp4 -r 30 -c:v libx264 -crf 23 -c:a copy output_30fps.mp4
 # fps filter (more control)
 ffmpeg -i input.mp4 -vf fps=30 -c:v libx264 -crf 23 -c:a copy output_30fps.mp4
 ```
+
+> For step-by-step size reduction (target MB, email/WhatsApp limits, maximum compression), see [Compressing Video File Size](#-compressing-video-file-size).
+
+---
+
+## 📉 Compressing Video File Size
+
+This section focuses on **making files smaller** while keeping acceptable quality. File size is determined by **duration × bitrate** (video + audio). To shrink a file, you lower bitrate, use a more efficient codec, reduce resolution/frame rate, or shorten the clip.
+
+### What affects file size
+
+| Factor | Impact on size | How to reduce |
+| ------ | ---------------- | ------------- |
+| **Duration** | Linear | Trim with `-ss` / `-t` (see [Cutting](#-cutting-concatenation--timing)) |
+| **Resolution** | Large (4K vs 720p can be 4–8×) | Scale down with `-vf scale=` |
+| **Frame rate** | Moderate | `-r 24` or `fps=24` for talking-head / screen content |
+| **Video codec** | Large | H.265 (~40–50% smaller than H.264 at similar quality) |
+| **CRF / bitrate** | Large | Raise CRF or cap `-b:v` |
+| **Audio** | Small–moderate | `-b:a 96k` or `64k`, mono `-ac 1` |
+| **Extra streams** | Variable | Drop subtitles/data with `-map` |
+
+### Step 1: Measure the original
+
+```bash
+# File size (human-readable)
+ls -lh input.mp4
+
+# Duration in seconds
+ffprobe -v error -show_entries format=duration -of default=noprint_wrappers=1:nokey=1 input.mp4
+
+# Resolution and video bitrate
+ffprobe -v error -select_streams v:0 -show_entries stream=width,height,bit_rate,codec_name -of csv=p=0 input.mp4
+```
+
+**Rough size math:**
+
+```text
+file_size (bits) ≈ (video_bitrate + audio_bitrate) × duration
+file_size (MB)   ≈ (video_kbps + audio_kbps) × duration_sec / 8000
+```
+
+Example: 5 minutes (300 s) at 8000 kbps video + 128 kbps audio → ~(8128 × 300) / 8000 ≈ **305 MB**.
+
+### Step 2: Choose a compression strategy
+
+Use this decision flow:
+
+```text
+Need exact max size (e.g. 25 MB email limit)?
+  → Target bitrate + two-pass (below)
+
+OK with "smaller but good looking"?
+  → CRF + maybe scale down (fastest workflow)
+
+Need smallest file, quality secondary?
+  → H.265 + higher CRF + 720p + lower audio
+```
+
+| Goal | Recommended approach |
+| ---- | -------------------- |
+| **Light compress** (~30% smaller) | H.264 CRF 26–28, same resolution |
+| **Balanced** (~50–60% smaller) | 1080p→720p + CRF 26, AAC 128k |
+| **Aggressive** (~70–80% smaller) | H.265, 720p or 480p, CRF 28–30, AAC 96k |
+| **Exact cap** (16 / 25 / 50 MB) | Calculate bitrate → two-pass |
+
+---
+
+### Method 1: CRF (quality-based — easiest)
+
+Raise **CRF** to reduce size. Each +6 on H.264 roughly **halves** the bitrate (and file size) for the same source type.
+
+| H.264 CRF | Typical use | Size vs CRF 23 |
+| --------- | ----------- | -------------- |
+| 18–20 | High quality archive | Larger |
+| 23 | Default / web | Baseline |
+| 26–28 | Smaller web, social | ~40–60% smaller |
+| 30–32 | Previews, thumbnails | Much smaller (visible softness) |
+
+**Balanced web compress (good starting point):**
+
+```bash
+ffmpeg -i input.mp4 -c:v libx264 -preset slow -crf 26 -pix_fmt yuv420p \
+  -c:a aac -b:a 128k -movflags +faststart compressed.mp4
+```
+
+**Smaller file (accept some quality loss):**
+
+```bash
+ffmpeg -i input.mp4 -vf "scale=1280:-2" -c:v libx264 -preset slow -crf 28 \
+  -c:a aac -b:a 96k -movflags +faststart small.mp4
+```
+
+**Maximum CRF compress (H.264, 720p):**
+
+```bash
+ffmpeg -i input.mp4 -vf "scale=1280:-2" -c:v libx264 -preset slow -crf 30 \
+  -c:a aac -b:a 64k -ac 1 -movflags +faststart tiny.mp4
+```
+
+> **Tip:** `-preset slow` (or `slower`) does **not** change quality at the same CRF—it improves compression efficiency, so the file is **smaller** for the same visual result. Encoding takes longer.
+
+---
+
+### Method 2: H.265 / HEVC (~40–50% smaller)
+
+Best when recipients can play H.265 (modern phones, desktops; some older browsers struggle).
+
+```bash
+ffmpeg -i input.mp4 -c:v libx265 -preset medium -crf 28 -tag:v hvc1 \
+  -c:a aac -b:a 128k -movflags +faststart hevc.mp4
+```
+
+| H.265 CRF | Rough H.264 equivalent |
+| --------- | ---------------------- |
+| 24 | CRF ~20 |
+| 28 | CRF ~23–24 |
+| 32 | CRF ~28 |
+
+**Aggressive H.265 + 720p:**
+
+```bash
+ffmpeg -i input.mp4 -vf "scale=1280:-2" -c:v libx265 -preset medium -crf 30 \
+  -c:a aac -b:a 96k -movflags +faststart small_hevc.mp4
+```
+
+---
+
+### Method 3: Lower resolution (often the biggest win)
+
+Downscaling 4K → 1080p or 1080p → 720p often saves more than tweaking CRF alone.
+
+| Source | Suggested max width | Example scale |
+| ------ | ------------------- | ------------- |
+| 4K (3840×2160) | 1920 (1080p) | `scale=1920:-2` |
+| 1080p | 1280 (720p) | `scale=1280:-2` |
+| 1080p / long talking head | 854 (480p) | `scale=854:-2` |
+| Screen recording | 1280 or native | Keep text readable |
+
+```bash
+# 4K → 1080p, balanced quality
+ffmpeg -i input.mp4 -vf "scale=1920:-2" -c:v libx264 -preset slow -crf 24 \
+  -c:a aac -b:a 128k -movflags +faststart hd.mp4
+
+# 1080p → 720p, smaller upload
+ffmpeg -i input.mp4 -vf "scale=1280:-2" -c:v libx264 -preset slow -crf 26 \
+  -c:a aac -b:a 96k -movflags +faststart sd.mp4
+```
+
+`-2` keeps aspect ratio and forces an **even** height (required for H.264/H.265).
+
+---
+
+### Method 4: Lower frame rate
+
+Useful for slides, podcasts with static visuals, or security footage—not ideal for sports.
+
+```bash
+# 60 fps → 30 fps
+ffmpeg -i input.mp4 -vf "fps=30,scale=1280:-2" -c:v libx264 -crf 26 \
+  -c:a aac -b:a 128k -movflags +faststart fps30.mp4
+
+# 30 fps → 24 fps (cinema-style; slightly smaller)
+ffmpeg -i input.mp4 -vf "fps=24,scale=1280:-2" -c:v libx264 -crf 26 \
+  -c:a aac -b:a 128k -movflags +faststart fps24.mp4
+```
+
+---
+
+### Method 5: Compress audio
+
+Audio is usually 5–15% of total size but easy to trim:
+
+```bash
+# Stereo 192k → 128k (transparent for most speech/music)
+-c:a aac -b:a 128k
+
+# Voice / podcast — mono 96k
+-c:a aac -b:a 96k -ac 1
+
+# Minimal audio (acceptable for background music)
+-c:a aac -b:a 64k -ac 1
+```
+
+Combine with video settings; don't use `-c:a copy` if you need a smaller audio track.
+
+---
+
+### Method 6: Target a specific file size (two-pass)
+
+When you need **≤ N MB** (email attachment, Discord, LMS upload), compute video bitrate:
+
+```text
+video_bitrate (kbps) = (target_size_MB × 8192) / duration_sec - audio_kbps - safety_margin
+```
+
+Use a **safety margin** of 50–100 kbps so the container overhead doesn't push you over.
+
+**Example:** 10-minute video (600 s), target **25 MB**, audio **96 kbps**:
+
+```text
+(25 × 8192) / 600 - 96 ≈ 341 - 96 ≈ 245 kbps video
+```
+
+**Two-pass H.264 to ~25 MB:**
+
+```bash
+DURATION=$(ffprobe -v error -show_entries format=duration -of default=noprint_wrappers=1:nokey=1 input.mp4)
+TARGET_MB=25
+AUDIO_K=96
+VIDEO_K=$(echo "scale=0; ($TARGET_MB * 8192 / $DURATION) - $AUDIO_K - 80" | bc)
+
+ffmpeg -y -i input.mp4 -c:v libx264 -b:v ${VIDEO_K}k -maxrate ${VIDEO_K}k -bufsize $((VIDEO_K * 2))k \
+  -pass 1 -an -f mp4 /dev/null
+
+ffmpeg -i input.mp4 -c:v libx264 -b:v ${VIDEO_K}k -maxrate ${VIDEO_K}k -bufsize $((VIDEO_K * 2))k \
+  -pass 2 -c:a aac -b:a ${AUDIO_K}k -movflags +faststart output_25mb.mp4
+```
+
+On Windows, replace `/dev/null` with `NUL` and compute `VIDEO_K` manually or in PowerShell.
+
+**Also scale down** if the calculated bitrate is very low (< 400 kbps at 1080p)—quality will break down; use 720p:
+
+```bash
+ffmpeg -i input.mp4 -vf "scale=1280:-2" -c:v libx264 -b:v 800k -maxrate 800k -bufsize 1600k \
+  -pass 1 -an -f mp4 /dev/null
+ffmpeg -i input.mp4 -vf "scale=1280:-2" -c:v libx264 -b:v 800k -maxrate 800k -bufsize 1600k \
+  -pass 2 -c:a aac -b:a 96k -movflags +faststart capped.mp4
+```
+
+---
+
+### Method 7: Strip extras (no re-encode or light remux)
+
+Removing unused streams doesn't recompress video but can shave megabytes:
+
+```bash
+# Video + one audio track only (drop subs, extra audio, chapters data)
+ffmpeg -i input.mp4 -map 0:v:0 -map 0:a:0 -c copy trimmed_streams.mp4
+
+# Strip metadata
+ffmpeg -i input.mp4 -map_metadata -1 -c copy no_meta.mp4
+```
+
+For real size reduction of the video itself, you must **re-encode** (`-c:v libx264` or `libx265`), not `-c copy`.
+
+---
+
+### Ready-made compression recipes
+
+#### Recipe A: "Half the size" (same resolution, good quality)
+
+```bash
+ffmpeg -i input.mp4 -c:v libx264 -preset slow -crf 26 -c:a aac -b:a 128k \
+  -movflags +faststart half-ish.mp4
+```
+
+#### Recipe B: Email-friendly (~25 MB for ~10 min, adjust as needed)
+
+```bash
+ffmpeg -i input.mp4 -vf "scale=1280:-2" -c:v libx264 -preset slow -crf 28 \
+  -c:a aac -b:a 96k -ac 1 -movflags +faststart email.mp4
+```
+
+If still too large, use [Method 6](#method-6-target-a-specific-file-size-two-pass) or shorten the clip.
+
+#### Recipe C: WhatsApp / messaging (short clip, ~720p)
+
+```bash
+ffmpeg -i input.mp4 -vf "scale=1280:-2" -c:v libx264 -preset fast -crf 28 \
+  -c:a aac -b:a 96k -movflags +faststart whatsapp.mp4
+```
+
+Check current WhatsApp size limits—they change by platform and file type.
+
+#### Recipe D: Web embed (fast start, reasonable size)
+
+```bash
+ffmpeg -i input.mp4 -vf "scale=1280:-2" -c:v libx264 -preset slow -crf 24 -pix_fmt yuv420p \
+  -c:a aac -b:a 128k -movflags +faststart web.mp4
+```
+
+#### Recipe E: Smallest practical MP4 (H.265 + 720p + high CRF)
+
+```bash
+ffmpeg -i input.mp4 -vf "scale=1280:-2" -c:v libx265 -preset medium -crf 32 \
+  -c:a aac -b:a 64k -ac 1 -movflags +faststart smallest.mp4
+```
+
+---
+
+### Compare before and after
+
+```bash
+ls -lh input.mp4 compressed.mp4
+
+# Per-stream bitrates
+ffprobe -v error -show_entries format=size,duration -show_entries stream=codec_type,bit_rate \
+  -of json input.mp4 compressed.mp4
+```
+
+Quick quality check: play both side by side in VLC or QuickTime. For objective metrics (optional, requires `libvmaf` build):
+
+```bash
+# SSIM between original and compressed (lower score = more difference)
+ffmpeg -i input.mp4 -i compressed.mp4 -lavfi ssim -f null -
+```
+
+---
+
+### Compression workflow (recommended)
+
+1. **Inspect** — duration, resolution, current size (`ffprobe`, `ls -lh`).
+2. **Pick target** — e.g. "under 50 MB" or "~50% smaller".
+3. **Scale first** if source is 4K or 1080p and target is mobile/web.
+4. **Encode** — start with CRF 26–28 + AAC 128k; or two-pass for hard caps.
+5. **Check size** — if still too large, raise CRF by 2 or scale to 720p.
+6. **Avoid double compression** — don't re-encode the same file repeatedly; always keep the **original master**.
+
+### Common mistakes
+
+| Mistake | Why it's bad | Fix |
+| ------- | -------------- | --- |
+| `-c copy` expecting smaller file | Only remuxes; no video compression | Use `libx264` / `libx265` |
+| CRF 18 on already-compressed video | Huge file, little quality gain | Use CRF 24–28 on delivery encodes |
+| 1080p at 300 kbps (two-pass) | Blocky mush | Scale to 720p/480p or raise target MB |
+| Odd dimensions (e.g. 1279×719) | Encoder errors or player issues | Use `scale=1280:-2` |
+| Ignoring audio | Misses easy savings | `-b:a 96k -ac 1` for voice |
 
 ---
 
@@ -759,7 +1087,15 @@ Quote paths with spaces: `-i "My Video.mp4"`.
 
 ### Huge output file
 
-CRF too low or `-preset placebo` with unnecessary resolution. Raise CRF (e.g. 23 → 28) or lower resolution.
+CRF too low or `-preset placebo` with unnecessary resolution. Raise CRF (e.g. 23 → 28) or lower resolution. See [Compressing Video File Size](#-compressing-video-file-size).
+
+### Compressed file still too large
+
+1. Scale down: `scale=1280:-2` or `scale=854:-2`
+2. Raise CRF by 2 (e.g. 26 → 28)
+3. Try H.265 (`libx265 -crf 28`)
+4. Lower audio: `-b:a 96k -ac 1`
+5. For a hard cap, use two-pass with calculated bitrate
 
 ### Subtitle filter path errors on Windows
 

@@ -12,7 +12,7 @@ A comprehensive collection of guides for processing, converting, and streaming a
 
 1. **New to FFmpeg?** Start with [What is FFmpeg?](./complete-guide.md#-what-is-ffmpeg) and [Installation](./complete-guide.md#-installation)
 2. **Need a quick conversion?** Jump to [Common Tasks](./complete-guide.md#-common-tasks)
-3. **Compressing for the web?** See [Encoding & Quality](./complete-guide.md#-encoding--quality)
+3. **Compressing file size?** See [Compressing Video File Size](./complete-guide.md#-compressing-video-file-size)
 4. **Trimming or merging clips?** See [Cutting, Concatenation & Timing](./complete-guide.md#-cutting-concatenation--timing)
 5. **Building a pipeline?** See [Filters](./complete-guide.md#-filters) and [Scripting & Automation](./complete-guide.md#-scripting--automation)
 
@@ -28,6 +28,7 @@ A comprehensive collection of guides for processing, converting, and streaming a
 - **Formats & codecs**: containers, streams, pixel formats, audio sample rates
 - **Conversion**: video/audio transcoding, remuxing, batch jobs
 - **Editing**: trim, crop, scale, rotate, overlay, concat
+- **Compression**: CRF, resolution, H.265, target MB, two-pass, ready-made recipes
 - **Quality**: CRF, bitrate, two-pass encoding, presets
 - **Streaming**: HLS, RTMP, pipe I/O
 - **Production**: hardware acceleration, metadata, error handling
